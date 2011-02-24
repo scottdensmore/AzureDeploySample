@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "AzureDeploy.Cloud", "AzureDeploy.Cloud\AzureDeploy.Cloud.ccproj", "{B3DF98DB-27E2-4637-BFE1-0DB830572395}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDeply.Web", "AzureDeply.Web\AzureDeply.Web.csproj", "{925EE0F6-103E-45A3-BE9D-63AED533759C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDeploy.WorkerRole", "AzureDeploy.WorkerRole\AzureDeploy.WorkerRole.csproj", "{B60FCEA5-E254-435C-ABE6-54705F224584}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3DF98DB-27E2-4637-BFE1-0DB830572395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3DF98DB-27E2-4637-BFE1-0DB830572395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3DF98DB-27E2-4637-BFE1-0DB830572395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3DF98DB-27E2-4637-BFE1-0DB830572395}.Release|Any CPU.Build.0 = Release|Any CPU
+		{925EE0F6-103E-45A3-BE9D-63AED533759C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{925EE0F6-103E-45A3-BE9D-63AED533759C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{925EE0F6-103E-45A3-BE9D-63AED533759C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{925EE0F6-103E-45A3-BE9D-63AED533759C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B60FCEA5-E254-435C-ABE6-54705F224584}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B60FCEA5-E254-435C-ABE6-54705F224584}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B60FCEA5-E254-435C-ABE6-54705F224584}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B60FCEA5-E254-435C-ABE6-54705F224584}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

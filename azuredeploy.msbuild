@@ -1,0 +1,97 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(BuildType)' == ''">
+    <BuildType>Release</BuildType>
+  </PropertyGroup>
+ 
+  <!-- Azure Information -->
+  <PropertyGroup>
+    <HostedServiceName>azuredeploy</HostedServiceName>
+    <StorageAccountName>azuregoldtest</StorageAccountName>
+    <StorageAccountKey>sfV0G3H2BDNyuJS9bAFvM572SbHsAYpTDGmP5QT7rmM32aRDoDSegaLMXyaYqob/YNw4/OvmlTpxUyrFsdsRuw==</StorageAccountKey>
+    <DevStorageKey>UseDevelopmentStorage=true</DevStorageKey>
+    <CertThumbprint>CB68800712058E8C1313C1438B8949AF7EB97609</CertThumbprint>
+    <SubscriptionKey>72a6331e-b851-4380-b02f-88e36c3e758e</SubscriptionKey>
+    <HostSlot>Staging</HostSlot>
+  </PropertyGroup>
+  
+  <!-- Certificate Information -->
+  <PropertyGroup>
+    <CertLocation>$(MSBuildProjectDirectory)\localhost.pfx</CertLocation>
+    <CertPassword>xyz</CertPassword>
+    <DeployCertAlgorithm>sha1</DeployCertAlgorithm>
+    <DeployCertThumbprint>5A074D678466F59DBD063D1A98B1791474723365</DeployCertThumbprint>
+  </PropertyGroup>
+  
+  <!-- Project/Solution Information -->
+  <PropertyGroup>
+    <AzureProjectName>AzureDeploy.Cloud.ccproj</AzureProjectName>
+    <AzureProjectPath>src\AzureDeploy.Cloud</AzureProjectPath>
+    <SolutionToBuild>src\AzureDeploy.sln</SolutionToBuild>
+    <PackageName>AzureDeploy.Cloud.cspkg</PackageName>
+    <ServiceConfigName>ServiceConfiguration.cscfg</ServiceConfigName>
+    <PackageLocation>$(MSBuildProjectDirectory)\$(AzureProjectPath)\bin\$(BuildType)\Publish\</PackageLocation>
+  </PropertyGroup>
+  
+   <UsingTask
+    AssemblyFile="src\BuildTasks\MSBuildTasks\bin\$(BuildType)\Microsoft.Practices.WindowsAzure.MSBuildTasks.dll"
+    TaskName="Microsoft.Practices.WindowsAzure.MSBuildTasks.RegexReplace"/>
+  
+  <Target Name="BuildTasks">
+    <MSBuild
+      Projects="src\BuildTasks\MSBuildTasks.sln"
+      Targets="Build"
+      Properties="Configuration=$(BuildType)"/>
+  </Target>
+  
+  <Target Name="Clean">
+    <MSBuild
+      Projects="$(SolutionToBuild)"
+      Targets="Clean"
+      Properties="Configuration=$(BuildType)"/>
+  </Target>
+
+  <Target Name="Build">
+    <MSBuild
+      Projects="$(SolutionToBuild)"
+      Targets="Build"
+      Properties="Configuration=$(BuildType)"/>
+  </Target>
+  
+  <Target Name="SetConnectionStrings" DependsOnTargets="BuildTasks">
+    <RegexReplace
+        Pattern='Setting name="DiagnosticsConnectionString" value="UseDevelopmentStorage=true"'
+        Replacement='Setting name="DiagnosticsConnectionString" value="DefaultEndpointsProtocol=https;AccountName=$(StorageAccountName);AccountKey=$(StorageAccountKey)"'
+        Files='$(AzureProjectPath)\$(ServiceConfigName)'/>
+    <RegexReplace
+        Pattern='Setting name="DataConnectionString" value="UseDevelopmentStorage=true"'
+        Replacement='Setting name="DataConnectionString" value="DefaultEndpointsProtocol=https;AccountName=$(StorageAccountName);AccountKey=$(StorageAccountKey)"'
+        Files='$(AzureProjectPath)\$(ServiceConfigName)'/>
+  </Target>
+  
+  <Target Name="SetDevConnectionStrings" DependsOnTargets="BuildTasks">
+    <RegexReplace
+        Replacement='Setting name="DiagnosticsConnectionString" value="UseDevelopmentStorage=true"'
+        Pattern='Setting name="DiagnosticsConnectionString" value="DefaultEndpointsProtocol=https;AccountName=$(StorageAccountName);AccountKey=$(StorageAccountKey)"'
+        Files='$(AzureProjectPath)\$(ServiceConfigName)'/>
+    <RegexReplace
+        Pattern='Setting name="DataConnectionString" value="DefaultEndpointsProtocol=https;AccountName=$(StorageAccountName);AccountKey=$(StorageAccountKey)"'
+        Replacement='Setting name="DataConnectionString" value="UseDevelopmentStorage=true"'
+        Files='$(AzureProjectPath)\$(ServiceConfigName)'/>
+  </Target>
+  
+  <Target Name="DeployCert">
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)" 
+      Command="$(windir)\system32\WindowsPowerShell\v1.0\powershell.exe -f deploycert.ps1 $(HostedServiceName) $(CertLocation) $(CertPassword) $(CertThumbprint) $(SubscriptionKey) $(DeployCertAlgorithm) $(DeployCertThumbprint)" />
+  </Target>
+  
+  <Target Name="Deploy" DependsOnTargets="BuildTasks;SetConnectionStrings;Build;DeployCert">
+    <MSBuild
+      Projects="$(AzureProjectPath)\$(AzureProjectName)"
+      Targets="CorePublish"
+      Properties="Configuration=$(BuildType)"/>
+    
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)" 
+      Command="$(windir)\system32\WindowsPowerShell\v1.0\powershell.exe -f deploy.ps1 $(PackageLocation) $(PackageName) $(ServiceConfigName) $(HostedServiceName) $(CertThumbprint) $(SubscriptionKey) $(HostSlot)" />
+    
+  </Target>
+</Project>
