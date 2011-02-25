@@ -3,15 +3,15 @@
   <Role name="AzureDeply.Web">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="DiagnosticsConnectionString" value="DefaultEndpointsProtocol=https;AccountName=azuregoldtest;AccountKey=sfV0G3H2BDNyuJS9bAFvM572SbHsAYpTDGmP5QT7rmM32aRDoDSegaLMXyaYqob/YNw4/OvmlTpxUyrFsdsRuw==" />
-      <Setting name="DataConnectionString" value="DefaultEndpointsProtocol=https;AccountName=azuregoldtest;AccountKey=sfV0G3H2BDNyuJS9bAFvM572SbHsAYpTDGmP5QT7rmM32aRDoDSegaLMXyaYqob/YNw4/OvmlTpxUyrFsdsRuw==" />
+      <Setting name="DiagnosticsConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="DataConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
   </Role>
   <Role name="AzureDeploy.WorkerRole">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="DiagnosticsConnectionString" value="DefaultEndpointsProtocol=https;AccountName=azuregoldtest;AccountKey=sfV0G3H2BDNyuJS9bAFvM572SbHsAYpTDGmP5QT7rmM32aRDoDSegaLMXyaYqob/YNw4/OvmlTpxUyrFsdsRuw==" />
-      <Setting name="DataConnectionString" value="DefaultEndpointsProtocol=https;AccountName=azuregoldtest;AccountKey=sfV0G3H2BDNyuJS9bAFvM572SbHsAYpTDGmP5QT7rmM32aRDoDSegaLMXyaYqob/YNw4/OvmlTpxUyrFsdsRuw==" />
+      <Setting name="DiagnosticsConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="DataConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

@@ -6,6 +6,7 @@ $thumbprint = $args[4]
 $cert = Get-Item cert:\CurrentUser\My\$thumbprint
 $sub = $args[5]
 $slot = $args[6]
+$storage = $args[7]
 $package = join-path $buildPath $packageName
 $config = join-path $buildPath $serviceconfig
 $a = Get-Date
@@ -34,7 +35,7 @@ if ($hostedService.Status -ne $null)
 }
 
 Get-HostedService -ServiceName $servicename -Certificate $cert -SubscriptionId $sub |
-    New-Deployment -Slot $slot -Package $package -Configuration $config -Label $buildLabel -ServiceName $servicename | 
+    New-Deployment -Slot $slot -Package $package -Configuration $config -Label $buildLabel -ServiceName $servicename -StorageServiceName $storage | 
     Get-OperationStatus -WaitToComplete
 
 Get-HostedService -ServiceName $servicename -Certificate $cert -SubscriptionId $sub | 
