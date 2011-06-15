@@ -80,7 +80,7 @@
   
   <!-- Certificate Information -->
   <PropertyGroup>
-    <CertLocation>$(MSBuildProjectDirectory)\localhost.pfx</CertLocation>
+    <CertLocation>"$(MSBuildProjectDirectory)\localhost.pfx"</CertLocation>
     <CertPassword>xyz</CertPassword>
     <DeployCertAlgorithm>sha1</DeployCertAlgorithm>
     <DeployCertThumbprint>5A074D678466F59DBD063D1A98B1791474723365</DeployCertThumbprint>
@@ -93,7 +93,7 @@
     <SolutionToBuild>src\AzureDeploy.sln</SolutionToBuild>
     <PackageName>AzureDeploy.Cloud.cspkg</PackageName>
     <ServiceConfigName>ServiceConfiguration.cscfg</ServiceConfigName>
-    <PackageLocation>$(MSBuildProjectDirectory)\$(AzureProjectPath)\bin\$(BuildType)\Publish\</PackageLocation>
+    <PackageLocation>"$(MSBuildProjectDirectory)\$(AzureProjectPath)\bin\$(BuildType)\Publish"</PackageLocation>
   </PropertyGroup>
   
   <Target Name="BuildTasks">
