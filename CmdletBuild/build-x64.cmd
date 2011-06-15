@@ -19,7 +19,7 @@ if exist %SystemRoot%\Microsoft.NET\Framework64\v4.0.30319 (
 
 @echo Building "AzureManagementTools.Cmdlets.csproj"
 :run
-call %msbuild% "..\..\..\..\code\AzureManagementTools.Cmdlets\AzureManagementTools.Cmdlets.csproj" /t:ReBuild /verbosity:%verbosity%
+call %msbuild% "..\..\..\code\AzureManagementTools.Cmdlets\AzureManagementTools.Cmdlets.csproj" /t:ReBuild /verbosity:%verbosity%
 
 @if errorlevel 1 goto :error
 @echo Build Complete

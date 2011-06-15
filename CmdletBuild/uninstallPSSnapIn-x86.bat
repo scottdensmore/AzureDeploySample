@@ -13,7 +13,7 @@ ECHO ----------------------------------------
 @REM )
 
 
-set assemblyPath="..\..\..\..\code\AzureManagementTools.Cmdlets\bin\Debug\Microsoft.Samples.AzureManagementTools.PowerShell.dll"
+set assemblyPath="..\..\..\code\AzureManagementTools.Cmdlets\bin\Debug\Microsoft.Samples.AzureManagementTools.PowerShell.dll"
 
 ECHO "Uninstalling PSSnapIn..."
 %installUtilDir%\installutil.exe -u %assemblyPath%

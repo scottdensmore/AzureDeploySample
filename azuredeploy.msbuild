@@ -1,4 +1,69 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- A RegEx task -->
+  <UsingTask TaskName="RegexReplace" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" > 
+    <ParameterGroup>
+      <Pattern ParameterType="System.String" Required="true" />
+      <Replacement ParameterType="System.String" Required="true" />
+      <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <WarnOnNoMatch ParameterType="System.Boolean" />
+      <IgnoreCase ParameterType="System.Boolean" />
+      <IgnorePatternWhitespace ParameterType="System.Boolean" />
+      <RightToLeft ParameterType="System.Boolean" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.Text.RegularExpressions"/>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        Log.LogMessage(MessageImportance.Low, "Pattern = {0}", Pattern);
+        Log.LogMessage(MessageImportance.Low, "Replacement = {0}", Replacement);
+        
+        RegexOptions options = RegexOptions.Compiled | RegexOptions.Multiline;
+        if (IgnoreCase)
+          options |= RegexOptions.IgnoreCase;
+        if (IgnorePatternWhitespace)
+          options |= RegexOptions.IgnorePatternWhitespace;
+        if (RightToLeft)
+          options |= RegexOptions.RightToLeft;
+
+        Regex regex = null;        
+        try
+        {
+            regex = new Regex(Pattern, options);
+        }
+        catch (Exception ex)
+        {
+            Log.LogError("Pattern error: {0}", ex.Message);            
+        }               
+
+        foreach (ITaskItem file in Files)
+        {
+            try
+            {
+                string fileSpec = Path.GetFullPath(file.ItemSpec);
+                string originalText = File.ReadAllText(fileSpec);
+                string replacementText = regex.Replace(originalText, Replacement);
+
+                if (WarnOnNoMatch && !regex.IsMatch(originalText))
+                    Log.LogWarning("No matches in '{0}'.", fileSpec);
+
+                if (originalText != replacementText)
+                {
+                    File.WriteAllText(fileSpec, replacementText);
+                    Log.LogMessage("Changed '{0}'.", fileSpec);
+                }
+                else
+                    Log.LogMessage("Skipped '{0}' (no changes)", fileSpec);
+            }
+            catch (Exception ex)
+            {
+                Log.LogError("File error: {0}", ex.Message);                
+            }
+        }
+        ]]>        
+      </Code>
+    </Task>
+  </UsingTask> 
+  
   <PropertyGroup Condition="'$(BuildType)' == ''">
     <BuildType>Release</BuildType>
   </PropertyGroup>
@@ -30,10 +95,6 @@
     <ServiceConfigName>ServiceConfiguration.cscfg</ServiceConfigName>
     <PackageLocation>$(MSBuildProjectDirectory)\$(AzureProjectPath)\bin\$(BuildType)\Publish\</PackageLocation>
   </PropertyGroup>
-  
-   <UsingTask
-    AssemblyFile="src\BuildTasks\MSBuildTasks\bin\$(BuildType)\Microsoft.Practices.WindowsAzure.MSBuildTasks.dll"
-    TaskName="Microsoft.Practices.WindowsAzure.MSBuildTasks.RegexReplace"/>
   
   <Target Name="BuildTasks">
     <MSBuild
@@ -90,7 +151,7 @@
       Properties="Configuration=$(BuildType)"/>
     
     <Exec WorkingDirectory="$(MSBuildProjectDirectory)" 
-      Command="$(windir)\system32\WindowsPowerShell\v1.0\powershell.exe -f deploy.ps1 $(PackageLocation) $(PackageName) $(ServiceConfigName) $(HostedServiceName) $(ApiCertThumbprint) $(SubscriptionKey) $(HostSlot) $(StorageAccountName)" />
+      Command="$(windir)\system32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -f deploy.ps1 $(PackageLocation) $(PackageName) $(ServiceConfigName) $(HostedServiceName) $(ApiCertThumbprint) $(SubscriptionKey) $(HostSlot) $(StorageAccountName)" />
     
   </Target>
 </Project>

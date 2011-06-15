@@ -15,7 +15,7 @@ call .\build-x86.cmd
 	set installUtilDir=%WINDIR%\Microsoft.NET\Framework\v4.0.30319
 @REM )
 
-set assemblyPath="..\..\..\..\code\AzureManagementTools.Cmdlets\bin\Debug\Microsoft.Samples.AzureManagementTools.PowerShell.dll"
+set assemblyPath="..\..\..\code\AzureManagementTools.Cmdlets\bin\Debug\Microsoft.Samples.AzureManagementTools.PowerShell.dll"
 
 ECHO "Installing PSSnapIn..."
 %installUtilDir%\installutil.exe -i %assemblyPath%
