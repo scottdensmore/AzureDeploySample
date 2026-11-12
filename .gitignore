@@ -18,3 +18,39 @@ Thumbs.db
 
 # mstest test results
 TestResults
+
+# Visual Studio and .NET build caches
+.vs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+packages/
+*.nupkg
+*.snupkg
+*.userosscache
+*.sln.docstates
+csx/
+ecf/
+rcf/
+
+# OS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+[Dd]esktop.ini
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
